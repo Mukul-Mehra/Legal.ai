@@ -8,7 +8,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://YOUR-FRONTEND.onrender.com",
+        "https://legal-ai-frontend-ivory.vercel.app/",
     ],
     allow_credentials=True,
     allow_methods=["*"],
