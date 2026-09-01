@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Tailwind's built-in dark: variant follows the OS setting. Repoint it at our
+   own attribute so an explicit choice inside the app always wins. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
+}
+
+@theme {
+  --color-canvas: #faf9f7;
+  --color-surface: #ffffff;
+  --color-bubble: #f0eee6;
+  --color-line: #e8e5df;
+  --color-ink: #1f1e1c;
+  --color-muted: #6b6862;
+  --color-accent: #c96442;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* This block is the entire dark theme. Since the @theme above is not `inline`,
+   the utilities reference these variables instead of hard-coded hex values, so
+   redefining them here is enough - no per-component dark: classes needed. */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-canvas: #1c1b19;
+  --color-surface: #262523;
+  --color-bubble: #34322e;
+  --color-line: #3b3936;
+  --color-ink: #f3f1ea;
+  --color-muted: #a5a19a;
+  --color-accent: #d97757;
+}
