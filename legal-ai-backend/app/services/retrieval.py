@@ -1,4 +1,5 @@
 from google import genai
+import time
 from google.genai import types
 from sqlalchemy import select
 from app.config import settings
@@ -9,15 +10,30 @@ client = genai.Client(api_key=settings.gemini_api_key)
 
 
 def embed_query(text: str):
-    result = client.models.embed_content(
-        model="gemini-embedding-001",
-        contents=text,
-        config=types.EmbedContentConfig(
-            task_type="RETRIEVAL_QUERY",
-            output_dimensionality=768
-        )
-    )
-    return result.embeddings[0].values
+    max_retries = 3
+
+    for attempt in range(max_retries):
+        try:
+            result = client.models.embed_content(
+                model="gemini-embedding-001",
+                contents=text,
+                config=types.EmbedContentConfig(
+                    task_type="RETRIEVAL_QUERY",
+                    output_dimensionality=768
+                )
+            )
+
+            return result.embeddings[0].values
+
+        except Exception as e:
+            error = str(e)
+
+            if "429" in error or "RESOURCE_EXHAUSTED" in error:
+                if attempt < max_retries - 1:
+                    time.sleep(2 ** attempt)
+                    continue
+
+            raise
 
 
 async def retrieve_relevant_docs(
