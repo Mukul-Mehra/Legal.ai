@@ -6,7 +6,10 @@ app = FastAPI(title="Legal AI Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # your Next.js frontend
+    allow_origins=[
+        "http://localhost:3000",
+        "https://YOUR-FRONTEND.onrender.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -15,6 +18,21 @@ app.add_middleware(
 app.include_router(ask.router, prefix="/api", tags=["ask"])
 app.include_router(auth.router, prefix="/api", tags=["auth"])
 
+
+@app.get("/")
+async def root():
+    return {"message": "Legal AI Backend is running"}
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/debug")
+async def debug():
+    return {
+        "app": "legal-ai-backend",
+        "version": "2026-09-01",
+        "status": "running"
+    }
