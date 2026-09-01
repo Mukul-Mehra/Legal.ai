@@ -10,11 +10,10 @@ app.add_middleware(
         "http://localhost:3000",
         "https://legal-ai-frontend-beta.vercel.app",
     ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
-
 app.include_router(ask.router, prefix="/api", tags=["ask"])
 app.include_router(auth.router, prefix="/api", tags=["auth"])
 
