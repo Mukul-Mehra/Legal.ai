@@ -16,6 +16,7 @@ that act's title in document_chunks and skips them — safe to re-run.
 import argparse
 import asyncio
 import re
+import selectors
 import sys
 from pathlib import Path
 
@@ -185,4 +186,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(
+        main(),
+        loop_factory=lambda: asyncio.SelectorEventLoop(selectors.SelectSelector())
+    )
